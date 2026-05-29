@@ -1,0 +1,17 @@
+{
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "latest",
+    "cors": "latest",
+    "multer": "latest",
+    "dotenv": "latest",
+    "openai": "latest",
+    "pdf-parse": "latest",
+    "mammoth": "latest",
+    "express-rate-limit": "latest"
+  }
+}
