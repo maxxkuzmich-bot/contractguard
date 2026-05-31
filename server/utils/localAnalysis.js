@@ -292,18 +292,30 @@ export function localDemoAnalysis(input, language = "en") {
   ];
 
   for (const combo of toxicCombos) {
-    if (combo.every((id) => foundIds.has(id))) {
-      totalPenalty += 10;
-    }
+  if (combo.every((id) => foundIds.has(id))) {
+    totalPenalty += 18;
   }
+}
 
-  let score = Math.max(15, 100 - totalPenalty);
+let score = Math.max(10, 100 - totalPenalty);
 
-  if (foundIds.has("non_compete")) score = Math.min(score, 65);
-  if (foundIds.has("liability")) score = Math.min(score, 70);
-  if (foundIds.has("penalties")) score = Math.min(score, 65);
-  if (foundIds.has("client_discretion") && foundIds.has("acceptance")) score = Math.min(score, 55);
-  if (foundIds.has("payment") && foundIds.has("ip_transfer")) score = Math.min(score, 55);
+if (foundIds.has("non_compete")) score = Math.min(score, 55);
+if (foundIds.has("liability")) score = Math.min(score, 60);
+if (foundIds.has("penalties")) score = Math.min(score, 55);
+if (foundIds.has("termination")) score = Math.min(score, 60);
+if (foundIds.has("acceptance")) score = Math.min(score, 70);
+if (foundIds.has("client_discretion")) score = Math.min(score, 65);
+
+if (foundIds.has("client_discretion") && foundIds.has("acceptance")) score = Math.min(score, 45);
+if (foundIds.has("payment") && foundIds.has("ip_transfer")) score = Math.min(score, 45);
+if (foundIds.has("payment") && foundIds.has("acceptance")) score = Math.min(score, 50);
+if (foundIds.has("termination") && foundIds.has("payment")) score = Math.min(score, 50);
+if (foundIds.has("non_compete") && foundIds.has("client_discretion")) score = Math.min(score, 45);
+if (foundIds.has("non_compete") && foundIds.has("acceptance")) score = Math.min(score, 45);
+
+if (foundIds.size >= 4) score = Math.min(score, 45);
+if (foundIds.size >= 5) score = Math.min(score, 35);
+if (foundIds.size >= 6) score = Math.min(score, 25);
 
   if (!risks.length) {
     score = 89;
