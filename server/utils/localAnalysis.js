@@ -1,69 +1,95 @@
 const RULES = [
   {
     id: "payment",
-    weight: 18,
+    weight: 22,
+    severity: "high",
     patterns: [
       /payment\s+after\s+(final\s+)?acceptance/i,
       /payment\s+.*approval/i,
       /delay\s+payment/i,
-      /no\s+specific\s+payment\s+deadline/i,
       /paid\s+only\s+after/i,
       /subject\s+to\s+client\s+approval/i,
-      /upon\s+client\s+satisfaction/i
+      /upon\s+client\s+satisfaction/i,
+      /payment\s+only\s+after\s+satisfaction/i,
+
+      /оплата\s+після\s+прийняття/i,
+      /оплата\s+після\s+схвалення/i,
+      /оплата\s+лише\s+після/i,
+      /оплата\s+тільки\s+після/i,
+      /затримати\s+оплату/i,
+      /має\s+право\s+затримати\s+оплату/i,
+      /до\s+моменту\s+повного\s+задоволення/i,
+      /після\s+повного\s+задоволення/i
     ],
     en: {
       title: "Payment Risk",
-      explanation: "Payment may depend on approval, acceptance, or unclear conditions. This can let the client delay or avoid payment.",
-      suggestion: "Add a clear payment deadline and milestone payments.",
-      clause: "Payment must be made within 7 days after delivery or invoice approval. Final rights transfer only after full payment.",
+      explanation: "Payment depends on approval, acceptance, satisfaction, or unclear conditions. This can let the client delay or avoid payment.",
+      suggestion: "Add a clear payment deadline, for example payment within 7 days after delivery or invoice.",
+      clause: "Payment must be made within 7 days after delivery or invoice. IP rights transfer only after full payment.",
       step: "Ask the client to add a clear payment deadline before signing."
     },
     uk: {
       title: "Ризик з оплатою",
-      explanation: "Оплата може залежати від прийняття, схвалення або нечітких умов. Це дозволяє клієнту затягувати або уникати оплати.",
-      suggestion: "Додай чіткий дедлайн оплати та оплату по етапах.",
+      explanation: "Оплата залежить від схвалення, прийняття, задоволення клієнта або нечітких умов. Це може дозволити замовнику затягувати оплату або уникати її.",
+      suggestion: "Додай чіткий строк оплати, наприклад оплату протягом 7 днів після здачі роботи або інвойсу.",
       clause: "Оплата має бути здійснена протягом 7 днів після здачі роботи або інвойсу. Права передаються тільки після повної оплати.",
-      step: "Попроси клієнта додати чіткий дедлайн оплати перед підписанням."
+      step: "Попроси клієнта додати чіткий строк оплати перед підписанням."
     }
   },
   {
     id: "ip_transfer",
-    weight: 18,
+    weight: 22,
+    severity: "high",
     patterns: [
       /all\s+(intellectual\s+property\s+)?rights\s+transfer/i,
       /ownership\s+.*transfer/i,
       /assigns?\s+all\s+rights/i,
       /perpetual\s+.*license/i,
-      /worldwide\s+.*license/i,
       /irrevocable\s+.*license/i,
       /exclusive\s+.*license/i,
-      /rights\s+.*immediately\s+after\s+delivery/i
+      /rights\s+.*immediately\s+after\s+delivery/i,
+      /transfer\s+before\s+payment/i,
+
+      /усі\s+права\s+інтелектуальної\s+власності\s+переходять/i,
+      /всі\s+права\s+інтелектуальної\s+власності\s+переходять/i,
+      /права\s+інтелектуальної\s+власності\s+переходять/i,
+      /права\s+переходять\s+до\s+замовника/i,
+      /передає\s+всі\s+права/i,
+      /передає\s+усі\s+права/i,
+      /з\s+моменту\s+створення/i
     ],
     en: {
       title: "Ownership / IP Transfer Risk",
       explanation: "The client may receive broad or permanent rights, possibly before you receive payment.",
-      suggestion: "Transfer ownership only after full payment and limit license scope.",
+      suggestion: "Transfer ownership only after full payment and limit the license scope.",
       clause: "All intellectual property rights transfer only after full payment has been received.",
       step: "Ask to transfer IP rights only after full payment."
     },
     uk: {
       title: "Ризик передачі прав",
       explanation: "Клієнт може отримати широкі або безстрокові права, можливо ще до повної оплати.",
-      suggestion: "Передавай права тільки після повної оплати та обмежуй ліцензію.",
+      suggestion: "Передавай права тільки після повної оплати та обмежуй обсяг ліцензії.",
       clause: "Усі права інтелектуальної власності передаються тільки після отримання повної оплати.",
       step: "Попроси, щоб права передавались тільки після повної оплати."
     }
   },
   {
     id: "liability",
-    weight: 22,
+    weight: 24,
+    severity: "high",
     patterns: [
       /unlimited\s+liability/i,
       /liable\s+for\s+any\s+damages/i,
       /all\s+damages/i,
       /indemnify/i,
       /hold\s+harmless/i,
-      /responsible\s+for\s+any\s+loss/i
+      /responsible\s+for\s+any\s+loss/i,
+
+      /необмежен(а|у)\s+відповідальн/i,
+      /відповідає\s+за\s+будь-які\s+збитки/i,
+      /відшкодовує\s+будь-які\s+збитки/i,
+      /усі\s+збитки/i,
+      /всі\s+збитки/i
     ],
     en: {
       title: "Unlimited Liability",
@@ -76,19 +102,28 @@ const RULES = [
       title: "Необмежена відповідальність",
       explanation: "Ти можеш відповідати за необмежені збитки. Це серйозний ризик для фрілансера.",
       suggestion: "Обмеж відповідальність сумою проєкту або вже оплаченою сумою.",
-      clause: "Відповідальність фрілансера обмежується сумою, фактично оплаченою за цим договором.",
+      clause: "Відповідальність виконавця обмежується сумою, фактично оплаченою за цим договором.",
       step: "Попроси обмежити відповідальність сумою проєкту."
     }
   },
   {
     id: "revisions",
-    weight: 14,
+    weight: 18,
+    severity: "medium",
     patterns: [
       /unlimited\s+revisions/i,
       /unlimited\s+changes/i,
       /revisions\s+until\s+satisfied/i,
       /changes\s+until\s+client\s+approval/i,
-      /without\s+extra\s+payment.*revision/i
+      /without\s+extra\s+payment.*revision/i,
+      /any\s+changes\s+without\s+extra\s+payment/i,
+
+      /будь-яких\s+змін/i,
+      /будь-які\s+зміни/i,
+      /без\s+додаткової\s+оплати/i,
+      /вимагати\s+внесення\s+будь-яких\s+змін/i,
+      /необмежен(і|у)\s+правк/i,
+      /безлімітн(і|у)\s+правк/i
     ],
     en: {
       title: "Unlimited Revisions",
@@ -99,7 +134,7 @@ const RULES = [
     },
     uk: {
       title: "Безлімітні правки",
-      explanation: "Клієнт може просити нескінченні правки без додаткової оплати.",
+      explanation: "Клієнт може просити нескінченні правки або будь-які зміни без додаткової оплати.",
       suggestion: "Обмеж кількість правок до 2–3 раундів, далі — доплата.",
       clause: "Проєкт включає до 2 раундів правок. Додаткові правки оплачуються окремо.",
       step: "Додай ліміт правок перед початком роботи."
@@ -107,16 +142,22 @@ const RULES = [
   },
   {
     id: "non_compete",
-    weight: 24,
+    weight: 25,
+    severity: "high",
     patterns: [
       /non[-\s]?compete/i,
       /shall\s+not\s+provide\s+services\s+to\s+competitors/i,
       /competitors?\s+for\s+\d+\s+(months|years)/i,
       /competing\s+business/i,
-      /similar\s+market/i,
-      /substantially\s+similar\s+services/i,
       /exclusivity/i,
-      /exclusive\s+relationship/i
+      /exclusive\s+relationship/i,
+
+      /не\s+має\s+права\s+працювати\s+з\s+конкурентами/i,
+      /конкурентами\s+замовника/i,
+      /конкурентів\s+замовника/i,
+      /працювати\s+з\s+конкурентами/i,
+      /протягом\s+\d+\s+рок(ів|и|у)?/i,
+      /ексклюзивн/i
     ],
     en: {
       title: "Non-Compete / Exclusivity Risk",
@@ -127,22 +168,30 @@ const RULES = [
     },
     uk: {
       title: "Ризик non-compete / ексклюзивності",
-      explanation: "Контракт може обмежувати твою можливість працювати з іншими клієнтами або конкурентами. Довгі non-compete умови можуть сильно обмежити дохід.",
-      suggestion: "Прибери non-compete або обмеж його по часу, території та конкретних клієнтах.",
-      clause: "Фрілансер може надавати послуги іншим клієнтам, якщо це не створює прямий конфлікт із конфіденційною інформацією цього проєкту.",
+      explanation: "Контракт обмежує можливість працювати з конкурентами або іншими клієнтами. Умова на 5 років може сильно обмежити твій дохід.",
+      suggestion: "Прибери non-compete або обмеж його за часом, територією та конкретними клієнтами.",
+      clause: "Виконавець може надавати послуги іншим клієнтам, якщо це не створює прямий конфлікт із конфіденційною інформацією цього проєкту.",
       step: "Попроси прибрати або сильно обмежити non-compete пункт."
     }
   },
   {
     id: "termination",
     weight: 20,
+    severity: "high",
     patterns: [
       /terminate\s+.*at\s+any\s+time/i,
       /termination\s+.*without\s+compensation/i,
       /client\s+may\s+terminate/i,
       /terminate\s+.*without\s+cause/i,
       /compensation\s+only\s+for\s+accepted\s+work/i,
-      /no\s+payment\s+.*terminated/i
+      /no\s+payment\s+.*terminated/i,
+
+      /розірвати\s+договір/i,
+      /розірвання\s+договору/i,
+      /в\s+односторонньому\s+порядку/i,
+      /без\s+компенсації/i,
+      /без\s+оплати\s+виконаних\s+робіт/i,
+      /без\s+оплати\s+вже\s+виконан/i
     ],
     en: {
       title: "Unfair Termination Risk",
@@ -154,22 +203,28 @@ const RULES = [
     uk: {
       title: "Ризик несправедливого розірвання",
       explanation: "Клієнт може розірвати договір без справедливої оплати вже виконаної роботи.",
-      suggestion: "Додай оплату за виконану роботу та розумний період попередження.",
-      clause: "Якщо клієнт розриває договір, фрілансер має отримати оплату за всю виконану роботу та завершені етапи.",
+      suggestion: "Додай оплату за виконану роботу та розумний строк попередження.",
+      clause: "Якщо клієнт розриває договір, виконавець має отримати оплату за всю виконану роботу та завершені етапи.",
       step: "Попроси додати оплату за виконану роботу у випадку розірвання."
     }
   },
   {
     id: "acceptance",
-    weight: 18,
+    weight: 20,
+    severity: "high",
     patterns: [
       /final\s+acceptance/i,
       /client\s+acceptance/i,
       /accepted\s+by\s+client/i,
       /satisfaction\s+of\s+client/i,
       /client\s+satisfaction/i,
-      /business\s+objectives/i,
-      /meet\s+client'?s?\s+expectations/i
+      /meet\s+client'?s?\s+expectations/i,
+
+      /повного\s+задоволення/i,
+      /задоволення\s+результатом/i,
+      /момент\s+завершення\s+робіт/i,
+      /замовник\s+самостійно\s+визначає\s+момент\s+завершення/i,
+      /прийняття\s+робіт\s+замовником/i
     ],
     en: {
       title: "Subjective Acceptance Risk",
@@ -188,14 +243,21 @@ const RULES = [
   },
   {
     id: "client_discretion",
-    weight: 16,
+    weight: 18,
+    severity: "medium",
     patterns: [
       /sole\s+discretion/i,
       /client'?s?\s+discretion/i,
       /client\s+determines/i,
       /client\s+decides/i,
       /reasonably\s+determined\s+by\s+client/i,
-      /as\s+determined\s+by\s+client/i
+      /as\s+determined\s+by\s+client/i,
+
+      /замовник\s+самостійно\s+визначає/i,
+      /на\s+розсуд\s+замовника/i,
+      /замовник\s+вирішує/i,
+      /замовник\s+має\s+право\s+самостійно/i,
+      /самостійно\s+визначає\s+момент/i
     ],
     en: {
       title: "Client Discretion Risk",
@@ -206,7 +268,7 @@ const RULES = [
     },
     uk: {
       title: "Ризик рішення на розсуд клієнта",
-      explanation: "Клієнт може мати занадто багато односторонньої влади вирішувати, чи робота прийнятна або оплачувана.",
+      explanation: "Замовник має занадто багато односторонньої влади вирішувати, коли робота завершена або чи вона прийнята.",
       suggestion: "Заміни розсуд клієнта на чіткі вимірювані критерії.",
       clause: "Прийняття роботи має базуватися на погодженому обсязі робіт і письмових вимогах, а не на односторонньому розсуді.",
       step: "Попроси прибрати нечіткі формулювання про рішення на розсуд клієнта."
@@ -214,14 +276,23 @@ const RULES = [
   },
   {
     id: "penalties",
-    weight: 22,
+    weight: 24,
+    severity: "high",
     patterns: [
       /penalty/i,
       /fine/i,
       /liquidated\s+damages/i,
       /forfeiture/i,
       /\$?\d{3,}[\d,\s]*\s*(penalty|fine|damages)/i,
-      /(penalty|fine|damages)\s+of\s+\$?\d+/i
+      /(penalty|fine|damages)\s+of\s+\$?\d+/i,
+
+      /штраф/i,
+      /сплачує\s+штраф/i,
+      /штраф\s+у\s+розмірі/i,
+      /200\s*000\s*грн/i,
+      /200000\s*грн/i,
+      /неустойк/i,
+      /пен[яі]/i
     ],
     en: {
       title: "Excessive Penalty Risk",
@@ -232,7 +303,7 @@ const RULES = [
     },
     uk: {
       title: "Ризик надмірних штрафів",
-      explanation: "Контракт може містити великі штрафи або збитки, непропорційні вартості проєкту.",
+      explanation: "Контракт містить великий штраф, який може бути непропорційним вартості проєкту.",
       suggestion: "Обмеж штрафи та прив’яжи їх до реальних доведених збитків.",
       clause: "Будь-які штрафи мають бути розумними, чітко визначеними та обмеженими прямими доведеними збитками.",
       step: "Попроси прибрати надмірні штрафи або встановити ліміт."
@@ -242,6 +313,10 @@ const RULES = [
 
 function hasPattern(text, patterns) {
   return patterns.some((pattern) => pattern.test(text));
+}
+
+function pushUnique(array, value) {
+  if (!array.includes(value)) array.push(value);
 }
 
 export function localDemoAnalysis(input, language = "en") {
@@ -262,13 +337,13 @@ export function localDemoAnalysis(input, language = "en") {
 
       risks.push({
         id: rule.id,
-        severity: rule.weight >= 22 ? "high" : rule.weight >= 18 ? "medium" : "low",
+        severity: rule.severity,
         title: copy.title,
         explanation: copy.explanation
       });
 
       suggestions.push({
-        title: copy.suggestion,
+        title: copy.title,
         text: copy.suggestion
       });
 
@@ -277,7 +352,7 @@ export function localDemoAnalysis(input, language = "en") {
         text: copy.clause
       });
 
-      nextSteps.push(copy.step);
+      pushUnique(nextSteps, copy.step);
       totalPenalty += rule.weight;
       foundIds.add(rule.id);
     }
@@ -286,36 +361,33 @@ export function localDemoAnalysis(input, language = "en") {
   const toxicCombos = [
     ["payment", "acceptance"],
     ["payment", "ip_transfer"],
-    ["liability", "penalties"],
-    ["non_compete", "termination"],
-    ["client_discretion", "acceptance"]
+    ["payment", "client_discretion"],
+    ["ip_transfer", "acceptance"],
+    ["client_discretion", "acceptance"],
+    ["non_compete", "penalties"],
+    ["termination", "payment"]
   ];
 
   for (const combo of toxicCombos) {
-  if (combo.every((id) => foundIds.has(id))) {
-    totalPenalty += 18;
+    if (combo.every((id) => foundIds.has(id))) totalPenalty += 18;
   }
-}
 
-let score = Math.max(10, 100 - totalPenalty);
+  let score = Math.max(15, 100 - totalPenalty);
 
-if (foundIds.has("non_compete")) score = Math.min(score, 55);
-if (foundIds.has("liability")) score = Math.min(score, 60);
-if (foundIds.has("penalties")) score = Math.min(score, 55);
-if (foundIds.has("termination")) score = Math.min(score, 60);
-if (foundIds.has("acceptance")) score = Math.min(score, 70);
-if (foundIds.has("client_discretion")) score = Math.min(score, 65);
+  if (foundIds.has("non_compete")) score = Math.min(score, 55);
+  if (foundIds.has("penalties")) score = Math.min(score, 55);
+  if (foundIds.has("termination")) score = Math.min(score, 60);
+  if (foundIds.has("acceptance")) score = Math.min(score, 70);
+  if (foundIds.has("client_discretion")) score = Math.min(score, 65);
+  if (foundIds.has("client_discretion") && foundIds.has("acceptance")) score = Math.min(score, 45);
+  if (foundIds.has("payment") && foundIds.has("ip_transfer")) score = Math.min(score, 45);
+  if (foundIds.has("payment") && foundIds.has("acceptance")) score = Math.min(score, 50);
+  if (foundIds.has("non_compete") && foundIds.has("penalties")) score = Math.min(score, 40);
 
-if (foundIds.has("client_discretion") && foundIds.has("acceptance")) score = Math.min(score, 45);
-if (foundIds.has("payment") && foundIds.has("ip_transfer")) score = Math.min(score, 45);
-if (foundIds.has("payment") && foundIds.has("acceptance")) score = Math.min(score, 50);
-if (foundIds.has("termination") && foundIds.has("payment")) score = Math.min(score, 50);
-if (foundIds.has("non_compete") && foundIds.has("client_discretion")) score = Math.min(score, 45);
-if (foundIds.has("non_compete") && foundIds.has("acceptance")) score = Math.min(score, 45);
-
-if (foundIds.size >= 4) score = Math.min(score, 45);
-if (foundIds.size >= 5) score = Math.min(score, 35);
-if (foundIds.size >= 6) score = Math.min(score, 25);
+  if (foundIds.size >= 4) score = Math.min(score, 45);
+  if (foundIds.size >= 5) score = Math.min(score, 35);
+  if (foundIds.size >= 6) score = Math.min(score, 25);
+  if (foundIds.size >= 7) score = Math.min(score, 20);
 
   if (!risks.length) {
     score = 89;
